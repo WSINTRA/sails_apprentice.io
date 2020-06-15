@@ -15,9 +15,9 @@ module.exports = {
     description: { type: "string", required: true },
     steps: {
       collection: 'steps',
-      via: 'owner'
+      via: 'recipe'
     },
-    owners: {
+    owner: {
       collection: 'user',
       via: 'recipes'
     }

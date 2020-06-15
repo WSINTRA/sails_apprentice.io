@@ -6,7 +6,6 @@
  */
 
 module.exports = {
-
   attributes: {
     title: { 
       required: true,
@@ -14,8 +13,9 @@ module.exports = {
     description: {type: 'string'},
     imageUrl: {type:'string'},
     videoUrl: {type:'string'},
-    owner:{
-      model: 'recipe'
+    recipe:{
+      model: 'recipe',
+      required: true,
     }
     
 

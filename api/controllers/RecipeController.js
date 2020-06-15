@@ -32,11 +32,14 @@ module.exports = {
       .fetch()
       //Once new recipe is created, build the Steps for the recipe
       .then((recipe) => {
+          
         // Create new steps based on the incoming params
         stepsObjs.forEach((element) => {
-          Steps.create({
+        console.log(recipe.id, "Should be id")
+        let recipeID = recipe.id
+        Steps.create({
             title: element.title,
-            owner: recipe.id,
+            recipe: recipeID,
           }).fetch().then((result) => {
             return console.log(result);
           });
@@ -48,7 +51,7 @@ module.exports = {
     }
   },
   showAll(req, res) {
-    let all = Steps.find().then((result) => {
+    let all = Recipe.find().populate('steps').then((result) => {
       return res.ok(result);
     });
   },

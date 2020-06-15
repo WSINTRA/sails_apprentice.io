@@ -25,7 +25,7 @@ module.exports = {
     },
     recipes: {
       collection: 'recipe',
-      via: 'owners'
+      via: 'owner'
     }
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
