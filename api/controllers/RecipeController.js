@@ -6,41 +6,50 @@
  */
 
 module.exports = {
-  create(req, res) {
+  async create(req, res) {
     try {
       let params = req.allParams();
-      if (!params.title) {
-        return res.badRequest({ err: "Recipe must have a title" });
+      if (!params.title || !params.user) {
+        return res.badRequest({
+          err: "Recipe must have a title and an associated user",
+        });
       }
-      //Split the steps object up into an array
-      //{ title: 'Eggs', steps: '[{title: "test"}]' }
+      //Split the steps object up into an array, make sure frontend follows the correct formatting
+      //{ "title": "Eggs", "steps": '[{"title": "test"}]' }
       let stepsArray = params.steps.replace(/[\[\]]/g, "").split(",");
       //Parse each object into an object
       let stepsObjs = stepsArray.map((step) => JSON.parse(step));
-      //Create new steps based on the incoming params
-      stepsObjs.forEach(element => {
-        Steps.create({
-            title: element.title,
-          }).then(result=> {
-              return console.log(result)
-            })
+      //Find the user creating the recipe, 
+      //TODO: Improve this so it only finds one result, not an array
+      const currentUser = await User.find({name: params.user});
+    //   Create a new Recipe based on the user
+    console.log(currentUser)
+     Recipe.create({
+        user: currentUser[0].id,
+        title: params.title,
+        description: params.description,
       })
-     
-    //     Recipe.create({
-    //       title: params.title,
-    //       description: params.description,
-    //       steps: stepsObject
-    //   })
-      return res.ok("This is fucking it");
+      .fetch()
+      //Once new recipe is created, build the Steps for the recipe
+      .then((recipe) => {
+        // Create new steps based on the incoming params
+        stepsObjs.forEach((element) => {
+          Steps.create({
+            title: element.title,
+            owner: recipe.id,
+          }).fetch().then((result) => {
+            return console.log(result);
+          });
+        });
+        return res.ok(recipe)
+      });
     } catch (err) {
       return res.serverError(err);
     }
   },
-
-
   showAll(req, res) {
-    let all = Steps.find().then(result=>{
-        return res.ok(result)
-    })
+    let all = Steps.find().then((result) => {
+      return res.ok(result);
+    });
   },
 };

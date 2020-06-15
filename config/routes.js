@@ -14,6 +14,6 @@ module.exports.routes = {
     'POST /recipes' : "RecipeController.create",
 
     //User routes
-    // 'POST   /user/login': "UserController.login",                    
-    // 'POST   /user/signup': "UserController.signup",
+    'POST   /user/login': "UserController.login",                    
+    'POST   /user/signup': "UserController.signup",
 };
