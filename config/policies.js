@@ -20,6 +20,7 @@ module.exports.policies = {
   '*': true,
   
   RecipeController:{
-    "showAll":"isLoggedIn"
+    "showAll":"isLoggedIn",
+    "create":"isLoggedIn"
   }
 };

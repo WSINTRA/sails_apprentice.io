@@ -19,13 +19,10 @@ module.exports = {
       //{ "title": "Eggs",..., "steps": '[{"title": "test"}]' }
       //Parse steps into an object
       const stepsObjs = JSON.parse(steps);
-      //Find the user creating the recipe,
-      const currentUser = await User.findOne({ name: user });
-      //Create a new Recipe based on the user
-      //Remove this log once finished debugging
-      console.log(currentUser);
+      //Create a new recipe
       Recipe.create({
-        user: currentUser.id,
+        //The user will be created from the JWT token, as outline in policy config and isLoggedIn.js
+        user: req.user,
         title: title,
         description: description,
       })
@@ -35,18 +32,11 @@ module.exports = {
           // Create new steps based on the incoming params
           try{
           stepsObjs.forEach((step) => {
-              
-            console.log(recipe.id, "Should be id");
             const recipeID = recipe.id;
             Steps.create({
               title: step.title,
               recipeTitle: recipeID,
             })
-              .fetch()
-              //Remove this log once finished debugging
-              .then((result) => {
-                return console.log(result, "New Steps Created");
-              });
           })
         }
         catch(err){
@@ -60,7 +50,8 @@ module.exports = {
       return res.serverError(err);
     }
   },
-  //Return all recipes
+
+  //Return all recipes if user is logged in, as outline in policy config and isLoggedIn
   showAll(req, res) {
     let all = Recipe.find()
       .populate("steps")
