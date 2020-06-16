@@ -38,8 +38,11 @@ module.exports = {
       const params = await Joi.validate(req.allParams(), schema)
       // Create new user and return a token with User
         const { name, password } = params;
-        const user = await User.findOne({name})
-        const recipes = await Recipe.findOne({user: user.id}).populate('steps');
+     
+          const user = await User.findOne({name})
+          const recipes = await Recipe.find({user: user.id}).populate('steps');
+          
+        
         const checkedPassword = await utilityService.comparePassword(password, user.password);
         if(checkedPassword){
           //Create a JWT token from service and return it, this user object will be used in the isLoggedIn policy
@@ -47,7 +50,7 @@ module.exports = {
           return res.ok({"user":user, "recipes":recipes, "token":token});
         }
         else{
-            return res.badRequest("Incorrect username or password")
+          return res.badRequest({'err':"User not found, please signup"})
         } 
     }
       //Some basic error checking
