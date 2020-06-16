@@ -6,7 +6,7 @@ module.exports = {
     async hashPassword(password){
         return await bcrypt.hash(password, SALT_ROUNDS);
     },
-    async comparePassword(){
-
+    async comparePassword(password, hashWord){
+        return await bcrypt.compare(password, hashWord)
     }
 }
