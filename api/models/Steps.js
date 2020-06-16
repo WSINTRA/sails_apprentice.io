@@ -13,7 +13,7 @@ module.exports = {
     description: {type: 'string'},
     imageUrl: {type:'string'},
     videoUrl: {type:'string'},
-    recipe:{
+    recipeTitle:{
       model: 'recipe',
       required: true,
     }

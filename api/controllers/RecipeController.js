@@ -40,7 +40,7 @@ module.exports = {
             const recipeID = recipe.id;
             Steps.create({
               title: step.title,
-              recipe: recipeID,
+              recipeTitle: recipeID,
             })
               .fetch()
               //Remove this log once finished debugging

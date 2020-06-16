@@ -14,7 +14,8 @@ module.exports = {
         name: name,
         password: encryptPassword,
       }).fetch();
-      return res.ok(user);
+      const token = jsonWebService.issuer({user: user.id}, "1 day");
+      return res.ok({"user":user, "token":token});
       //Some basic error checking
       //TODO: improve error checking
     } catch (err) {
@@ -22,20 +23,20 @@ module.exports = {
     }
   },
   login: async function (req, res) {
+    console.log("RES", res)
     try {
         const {name, password } = req.allParams();
         const user = await User.findOne({name})
+        const recipes = await Recipe.findOne({user: user.id}).populate('steps');
         const checkedPassword = await utilityService.comparePassword(password, user.password);
-
-        console.log(checkedPassword)
         if(checkedPassword){
-            
-            return res.ok(user)
+          //Create a JWT token from service and return it, this user object will be used in the isLoggedIn policy
+          const token = jsonWebService.issuer({user: user.id}, "1 day");
+          return res.ok({"user":user, "recipes":recipes, "token":token});
         }
         else{
             return res.badRequest("Incorrect username or password")
-        }
-        
+        } 
     }
       //Some basic error checking
       //TODO: improve error checking

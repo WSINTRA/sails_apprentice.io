@@ -7,19 +7,15 @@
 
 module.exports = {
   attributes: {
+    steps: {
+      collection: 'steps',
+      via: 'recipeTitle'
+    },
     user: {
       model: 'user',
       required: true
     },
     title: { type: "string", required: true },
     description: { type: "string", required: true },
-    steps: {
-      collection: 'steps',
-      via: 'recipe'
-    },
-    owner: {
-      collection: 'user',
-      via: 'recipes'
-    }
   },
 };
