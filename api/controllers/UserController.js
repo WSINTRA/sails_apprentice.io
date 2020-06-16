@@ -4,11 +4,18 @@
  * @description :: Server-side actions for handling incoming requests.
  * @help        :: See https://sailsjs.com/docs/concepts/actions
  */
-
+const Joi = require('joi')
 module.exports = {
   signup: async function (req, res) {
+    //Use Joi for extra validations
     try {
-      const { name, password } = req.allParams();
+    const schema = Joi.object().keys({
+      name: Joi.string().required(), 
+      password: Joi.string().required(),
+    })
+    const params = await Joi.validate(req.allParams(), schema)
+    // Create new user and return a token with User
+      const { name, password } = params;
       const encryptPassword = await utilityService.hashPassword(password);
       const user = await User.create({
         name: name,
@@ -23,9 +30,14 @@ module.exports = {
     }
   },
   login: async function (req, res) {
-    console.log("RES", res)
     try {
-        const {name, password } = req.allParams();
+      const schema = Joi.object().keys({
+        name: Joi.string().required(), 
+        password: Joi.string().required(),
+      })
+      const params = await Joi.validate(req.allParams(), schema)
+      // Create new user and return a token with User
+        const { name, password } = params;
         const user = await User.findOne({name})
         const recipes = await Recipe.findOne({user: user.id}).populate('steps');
         const checkedPassword = await utilityService.comparePassword(password, user.password);

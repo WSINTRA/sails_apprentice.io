@@ -19,9 +19,10 @@ module.exports = {
     name: {
       type: 'string',
       required: true,
+      unique: true,
       description: 'Full representation of the user\'s name.',
       maxLength: 120,
-      example: 'Mary Sue van der McHenst'
+      example: 'Mary'
     },
     recipe: {
       collection: 'recipe',
