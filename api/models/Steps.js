@@ -18,8 +18,6 @@ module.exports = {
       model: 'recipe',
       required: true,
     }
-    
-
   },
 
 };
