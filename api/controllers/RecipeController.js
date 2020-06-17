@@ -7,7 +7,7 @@
 
 module.exports = {
   //Create a method for new Recipe that includes creating Steps
-  async create(req, res) {
+  create(req, res) {
     try {
       const { user, title, description, steps } = req.allParams();
       if (!title || !user) {
@@ -15,10 +15,6 @@ module.exports = {
           err: "Recipe must have a title and an associated user",
         });
       }
-      //Split the steps object up into an array, make sure frontend follows the correct formatting
-      //{ "title": "Eggs",..., "steps": '[{"title": "test"}]' }
-      //Parse steps into an object
-      const stepsObjs = JSON.parse(steps);
       //Create a new recipe
       Recipe.create({
         //The user will be created from the JWT token, as outline in policy config and isLoggedIn.js
@@ -28,20 +24,16 @@ module.exports = {
       })
         .fetch()
         //Once new recipe is created, build the Steps for the recipe
-        .then((recipe) => {
+        .then( (recipe) => {
           // Create new steps based on the incoming params
-          try{
-          stepsObjs.forEach((step) => {
+          
+          steps.forEach((step) => {
             const recipeID = recipe.id;
             Steps.create({
               title: step.title,
               recipeTitle: recipeID,
             })
           })
-        }
-        catch(err){
-            return res.serverError(err)
-        }
         //Return the response if all went well
         return res.ok(recipe);
         });
