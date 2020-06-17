@@ -7,16 +7,17 @@
 
 module.exports = {
   //Create a method for new Recipe that includes creating Steps
-  create(req, res) {
+  async create(req, res) {
     try {
-      const { user, title, description, steps } = req.allParams();
-      if (!title || !user) {
+      const { title, description, steps } = req.allParams();
+      if (!title ) {
         return res.badRequest({
-          err: "Recipe must have a title and an associated user",
+          err: "Recipe must have a title",
         });
       }
+      // console.log(title, "Titlte")
       //Create a new recipe
-      Recipe.create({
+      const newRecipe = await Recipe.create({
         //The user will be created from the JWT token, as outline in policy config and isLoggedIn.js
         user: req.user,
         title: title,
@@ -24,23 +25,16 @@ module.exports = {
       })
         .fetch()
         //Once new recipe is created, build the Steps for the recipe
-        .then( (recipe) => {
-          // Create new steps based on the incoming params
-          
-          steps.forEach((step) => {
-            const recipeID = recipe.id;
-            Steps.create({
-              title: step.title,
-              time: step.time,
-              description: step.description,
-              imageUrl: step.imageUrl,
-              videoUrl: step.videoUrl,
-              recipeTitle: recipeID,
-            })
-          })
+       .then((recipe)=> {
+       // Create new steps based on the incoming params
+         steps.forEach((step)=> {
+            step.recipeTitle = recipe.id
+          })})
+        const allSteps = await Steps.createEach(steps).fetch()
         //Return the response if all went well
-        return res.ok(recipe);
-        });
+        const result = await Recipe.findOne({title: title})
+
+        return res.ok(result)
         //Else return big fat ERROR
     } catch (err) {
       return res.serverError(err);
