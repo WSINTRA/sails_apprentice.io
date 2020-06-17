@@ -10,6 +10,7 @@ module.exports = {
     title: { 
       required: true,
       type: 'string'},
+    time: {type: 'number'},
     description: {type: 'string'},
     imageUrl: {type:'string'},
     videoUrl: {type:'string'},

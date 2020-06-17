@@ -31,6 +31,10 @@ module.exports = {
             const recipeID = recipe.id;
             Steps.create({
               title: step.title,
+              time: step.time,
+              description: step.description,
+              imageUrl: step.imageUrl,
+              videoUrl: step.videoUrl,
               recipeTitle: recipeID,
             })
           })
