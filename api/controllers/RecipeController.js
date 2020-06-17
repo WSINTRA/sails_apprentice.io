@@ -15,7 +15,7 @@ module.exports = {
           err: "Recipe must have a title",
         });
       }
-      // console.log(title, "Titlte")
+      console.log(req.allParams())
       //Create a new recipe
       const newRecipe = await Recipe.create({
         //The user will be created from the JWT token, as outline in policy config and isLoggedIn.js
@@ -33,7 +33,6 @@ module.exports = {
         const allSteps = await Steps.createEach(steps).fetch()
         //Return the response if all went well
         const result = await Recipe.findOne({title: title})
-
         return res.ok(result)
         //Else return big fat ERROR
     } catch (err) {
