@@ -3,8 +3,8 @@
 you can clone this repo and then
 ```yarn install```
 
-then in order to use the backend with a DB you will have to change ./config/datastores to your mongoDB
-currently it is set to a free tier mongoDB form atlas and I have my IP set in the whitelist.
+In order to use the backend with a DB you will have to change ./config/datastores to your mongoDB
+currently it is set to a free tier mongoDB from atlas and I have my IP set in the whitelist.
 
 Once you have made those changes, start with
 ```sails lift```
